@@ -14,7 +14,7 @@ class FileStorage:
             return self.__objects
         result = {}
         for key in self.__objects.keys():
-            if (key.split(".")[0] == cls):
+            if (key.split(".")[0] == cls.__name__):
                 result.update({key: self.__objects[key]})
         return result
     def new(self, obj):
