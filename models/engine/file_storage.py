@@ -56,6 +56,6 @@ class FileStorage:
         obj_to_del = f"{obj.__class__.__name__}.{ojb.id}"
 
         try:
-            del self.__objects[obj_to_del]
+            del FileStorage.__objects[obj_to_del]
         except AttributeError:
             pass
