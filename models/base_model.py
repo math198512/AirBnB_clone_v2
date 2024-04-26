@@ -56,5 +56,5 @@ class BaseModel:
 
     def delete(self):
         """ delete the current instance from the storage"""
-        k = "{}.{}".format(type(self).__name__, self.id)
-        del models.storage.__objects[k]
+        from models import storage
+        storage.delete(self))
