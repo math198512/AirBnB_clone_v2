@@ -16,44 +16,46 @@ from models.place import Place
 from models.amenity import Amenity
 
 
-HBNB_MYSQL_USER = getenv('HBNB_MYSQL_USER')
-HBNB_MYSQL_PWD = getenv('HBNB_MYSQL_PWD')
-HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST')
-HBNB_MYSQL_DB = getenv('HBNB_MYSQL_DB')
-
-
-class DBStorage:
+class DBStorage():
     """This class manages storage of hbnb models in database"""
     __engine = None
     __session = None
 
     def __init__(self):
         """"initializes db storage"""
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
+        HBNB_MYSQL_USER = getenv('HBNB_MYSQL_USER')
+        HBNB_MYSQL_PWD = getenv('HBNB_MYSQL_PWD')
+        HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST')
+        HBNB_MYSQL_DB = getenv('HBNB_MYSQL_DB')
+        HBNB_ENV = getenv('HBNB_ENV')
+        self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".format(
             HBNB_MYSQL_USER,
             HBNB_MYSQL_PWD,
             HBNB_MYSQL_HOST,
             HBNB_MYSQL_DB), pool_pre_ping=True)
-        env = getenv(HBNB_ENV)
+        env = HBNB_ENV
         if env == 'test':
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """query on the current database session all objects"""
-        result = {}
-        if cls:
-            for row in self.__session.query(cls).all():
-                key = "{}.{}".format(cls.__name__, row.id)
-                row.to_dict()
-                result.update({key: row})
+        objects_list = []
+        if cls :
+            if isinstance(cls, str):
+                try:
+                    cls = globals()[cls]
+                except KeyError:
+                    pass
+            if issubclass(cls, Base):
+                objects_list = self.__session.query(cls).all()
         else:
-            for table in models.dummy_tables:
-                cls = models.dummy_tables[table]
-                for row in self.__session.query(cls).all():
-                    key = "{}.{}".format(cls.__name__, row.id)
-                    row.to_dict()
-                    result.update({key: row})
-        return result
+            for subclass in Base.__subclasses__():
+                objects_list.extend(self.__session.query(subclass).all())
+        objects_dict = {}
+        for obj in objects_list:
+            key =  "{}.{}".format(ojb.__class__.__name__, obj.id)
+            objects_dict[key] = obj
+        return objects_dict
 
     def new(self, obj):
         """add object to current session
