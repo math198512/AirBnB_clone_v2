@@ -8,7 +8,7 @@ from models.user import User
 from models.place import Place
 from models.amenity import Amenity
 
-from os import environ
+from os import getenv
 
 dummy_classes = {"BaseModel": BaseModel, "User": User,
                  "Review": Review, "City": City,
@@ -19,7 +19,7 @@ dummy_tables = {"states": State, "cities": City,
                 "users": User, "places": Place,
                 "reviews": Review, "amenities": Amenity}
 
-storage_engine = environ.get("HBNB_TYPE_STORAGE")
+storage_engine = getenv("HBNB_TYPE_STORAGE")
 
 if (storage_engine == "db"):
     from models.engine.db_storage import DBStorage
