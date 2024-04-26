@@ -11,7 +11,7 @@ storage_engine = environ.get("HBNB_TYPE_STORAGE")
 
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
-    if storage_engine == "db":
+    if (storage_engine == "db"):
         __tablename__ = "cities"
         name = Column(String(128), nullable=False)
         state_id = Column(String(60), nullable=False, ForeignKey('states.id'))
