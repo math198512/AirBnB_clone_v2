@@ -33,8 +33,20 @@ class DBStorage:
 
     def all(self, cls=None):
         """query on the current database session all objects"""
-        objs = []
+        result = {}
         if cls:
+            for row in self.__session.query(cls).all():
+                key = "{}.{}".format(cls.__name__, row.id)
+                row.to_dict()
+                result.update({key: row})
+        else:
+            for table in models.dummy_tables:
+                cls = models.dummy_tables[table]
+                for row in self.__session.query(cls).all():
+                    key = "{}.{}".format(cls.__name__, row.id)
+                    row.to_dict()
+                    result.update({key: row})
+        return result
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
