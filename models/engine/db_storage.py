@@ -40,7 +40,7 @@ class DBStorage():
     def all(self, cls=None):
         """query on the current database session all objects"""
         objects_list = []
-        if cls :
+        if cls:
             if isinstance(cls, str):
                 try:
                     cls = globals()[cls]
@@ -53,7 +53,7 @@ class DBStorage():
                 objects_list.extend(self.__session.query(subclass).all())
         objects_dict = {}
         for obj in objects_list:
-            key =  "{}.{}".format(ojb.__class__.__name__, obj.id)
+            key = "{}.{}".format(ojb.__class__.__name__, obj.id)
             objects_dict[key] = obj
         return objects_dict
 
