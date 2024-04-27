@@ -53,12 +53,12 @@ class HBNBCommand(cmd.Cmd):
                             elif ("." in value):
                                 try:
                                     value = float(value)
-                                except:
+                                except TypeError:
                                     flag = 1
                             else:
                                 try:
                                     value = int(value)
-                                except:
+                                except TypeError:
                                     flag = 1
                             if (not flag):
                                 setattr(new_instance, pair_split[0], value)
@@ -66,9 +66,9 @@ class HBNBCommand(cmd.Cmd):
                             continue
                     new_instance.save()
                     print(new_instance.id)
-                except:
+                except Exception as e:
                     new_instance.rollback()
-            except:
+            except Exception as e:
                 print("** class doesn't exist **")
                 models.storage.rollback()
         else:
@@ -83,7 +83,7 @@ class HBNBCommand(cmd.Cmd):
                     key = "{}.{}".format(arg[0], arg[1])
                     try:
                         print(models.storage.all()[key])
-                    except:
+                    except Exception as e:
                         print("** no instance found **")
                 else:
                     print("** instance id missing **")
@@ -103,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
                         garbage = models.storage.all().pop(key)
                         del(garbage)
                         models.storage.save()
-                    except:
+                    except Exception as e:
                         print("** no instance found **")
                 else:
                     print("** instance id missing **")
@@ -147,7 +147,7 @@ class HBNBCommand(cmd.Cmd):
                                 print("** value missing **")
                         else:
                             print("** attribute name missing **")
-                    except:
+                    except Exception as e:
                         print("** no instance found **")
                 else:
                     print("** instance id missing **")
