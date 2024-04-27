@@ -101,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
                     key = "{}.{}".format(arg[0], arg[1])
                     try:
                         garbage = models.storage.all().pop(key)
-                        del(garbage)
+                        del garbage
                         models.storage.save()
                     except Exception as e:
                         print("** no instance found **")
