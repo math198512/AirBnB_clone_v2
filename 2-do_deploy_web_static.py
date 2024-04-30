@@ -20,21 +20,27 @@ def do_deploy(archive_path):
 
         no_ext = archive_path.split("/")[-1].strip('.tgz')
 
+        run('sudo mkdir -p tmp')
+
         # Upload the archive to the /tmp
         put(archive_path, '/tmp/')
         new_path = "/tmp/{}".format(file_name)
 
         # Create dest dir
-        unc_path = '/data/web_static/releases/{}/'.format(no_ext)
+        unc_path = 'data/web_static/releases/{}/'.format(no_ext)
         run('sudo mkdir -p {}'.format(unc_path))
         # Uncompress the archive
-        run("sudo tar {} -xzvf -C {}".format(new_path, unc_path))
+        run("sudo tar -xzf {} -C {}".format(new_path, unc_path))
         # Delete the archive
         run("sudo rm {}".format(new_path))
+        # Move contents into host web_static
+        run('sudo mv ./{}web_static/* ./{}'.format(unc_path, unc_path))
+        # Delete extra dir
+        run('sudo rm -rf ./{}web_static/'.format(unc_path))
         # Delete symlink
         run('sudo rm -rf /data/web_static/current')
         # Create symlink
-        run('sudo ln -s {} /data/web_static/current'.format(unc_path))
+        run('sudo ln -s /{} /data/web_static/current'.format(unc_path))
 
     except Exception:
         return False
