@@ -9,11 +9,9 @@ env.hosts = ['3.86.13.247', '35.174.208.1']
 env.user = 'ubuntu'
 env.key_filename = '~/.ssh/id_rsa'
 
-def do_deploy(archive_path):
-    """
-    Deploy web files to server
-    """
 
+def do_deploy(archive_path):
+    """ Deploy to webservers """
     try:
         if not (path.exists(archive_path)):
             return False
@@ -27,8 +25,8 @@ def do_deploy(archive_path):
         new_path = "/tmp/{}".format(file_name)
 
         # Create dest dir
-        unc_path = '/data/web_static/releases/{}/'.format(no_ext) 
-        run('sudo mkdir -p {}'.format(unc_path)
+        unc_path = '/data/web_static/releases/{}/'.format(no_ext)
+        run('sudo mkdir -p {}'.format(unc_path))
         # Uncompress the archive
         run("sudo tar {} -xzvf -C {}".format(new_path, unc_path))
         # Delete the archive
@@ -38,7 +36,7 @@ def do_deploy(archive_path):
         # Create symlink
         run('sudo ln -s {} /data/web_static/current'.format(unc_path))
 
-    except:
+    except Exception:
         return False
 
     # return True on success
