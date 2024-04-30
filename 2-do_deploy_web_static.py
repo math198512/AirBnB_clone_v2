@@ -13,6 +13,7 @@ def do_deploy(archive_path):
     """
     Deploy web files to server
     """
+
     try:
         if not (path.exists(archive_path)):
             return False
