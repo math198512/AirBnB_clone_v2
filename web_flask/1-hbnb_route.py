@@ -15,7 +15,7 @@ def index1():
 @app.route("/hbnb", strict_slashes=False)
 def index2():
     """ here """
-    return "HBNB!"
+    return "HBNB"
 
 
 if __name__ == "__main__":
