@@ -65,3 +65,7 @@ class FileStorage:
             del FileStorage.__objects[obj_to_del]
         except AttributeError:
             pass
+    
+    def close(self):
+        """ close: to be added """
+        self.reload()
