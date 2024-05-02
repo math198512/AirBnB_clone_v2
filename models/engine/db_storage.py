@@ -80,3 +80,7 @@ class DBStorage():
         """
         if (obj is None):
             self.__session.delete(obj)
+
+    def close(self):
+        """ close: to be added """
+        self.__session.remove()
