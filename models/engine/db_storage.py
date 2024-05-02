@@ -82,5 +82,7 @@ class DBStorage():
             self.__session.delete(obj)
 
     def close(self):
-        """ close: to be added """
-        self.__session.close()
+        """display our HBNB data
+        """
+        self.__session.__class__.close(self.__session)
+        self.reload()
